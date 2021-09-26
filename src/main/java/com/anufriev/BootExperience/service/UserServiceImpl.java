@@ -7,12 +7,9 @@ import com.anufriev.BootExperience.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Transient;
 import java.util.List;
 import java.util.Set;
 
@@ -35,15 +32,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void addUser(User user) {
-        String encodedPassword = passwordEncoder().encode(user.getPassword());
-        user.setPassword(encodedPassword);
         userRepo.save(user);
     }
 
     @Override
     public void update(User updatedUser) {
-        String encodedPassword = passwordEncoder().encode(updatedUser.getPassword());
-        updatedUser.setPassword(encodedPassword);
         userRepo.save(updatedUser);
     }
 
@@ -68,11 +61,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username);
-    }
-
-    private PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepo.findByEmail(email);
     }
 }

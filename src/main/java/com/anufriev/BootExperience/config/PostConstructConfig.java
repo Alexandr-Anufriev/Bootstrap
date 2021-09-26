@@ -5,6 +5,7 @@ import com.anufriev.BootExperience.model.User;
 import com.anufriev.BootExperience.repository.RoleRepo;
 import com.anufriev.BootExperience.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,8 @@ public class PostConstructConfig {
         this.roleRepo = roleRepo;
     }
 
-    private PasswordEncoder passwordEncoder(){
+    @Bean
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
@@ -44,11 +46,18 @@ public class PostConstructConfig {
     }
 
     private void checkAdmin() {
-        if(!userRepo.existsByUsername("admin")){
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleRepo.findByName("ROLE_ADMIN"));
-        roleSet.add(roleRepo.findByName("ROLE_USER"));
-        userRepo.save(new User("admin", passwordEncoder().encode("admin"), roleSet));
+        if (!userRepo.existsByUsername("admin")) {
+            Set<Role> roleSet = new HashSet<>();
+            roleSet.add(roleRepo.findByName("ROLE_ADMIN"));
+            roleSet.add(roleRepo.findByName("ROLE_USER"));
+            User user = new User();
+            user.setUsername("admin");
+            user.setPassword(passwordEncoder().encode("admin"));
+            user.setLastname("adminovyan");
+            user.setEmail("admin@mail.ru");
+            user.setAge(28);
+            user.setRoles(roleSet);
+            userRepo.save(user);
         }
     }
 
@@ -56,7 +65,14 @@ public class PostConstructConfig {
         if(!userRepo.existsByUsername("user")){
             Set<Role> roleSet = new HashSet<>();
             roleSet.add(roleRepo.findByName("ROLE_USER"));
-            userRepo.save(new User("user", passwordEncoder().encode("user"), roleSet));
+            User user = new User();
+            user.setUsername("user");
+            user.setPassword(passwordEncoder().encode("user"));
+            user.setLastname("userzian");
+            user.setEmail("user@mail.ru");
+            user.setAge(37);
+            user.setRoles(roleSet);
+            userRepo.save(user);
         }
     }
 }

@@ -16,6 +16,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+    private String lastname;
+    private int age;
+    private String email;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
@@ -56,6 +59,31 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     //UserDetailsMethods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
